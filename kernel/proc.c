@@ -5,6 +5,8 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
+// task1:
+#include "petersonlock.h"
 
 struct cpu cpus[NCPU];
 
@@ -25,6 +27,7 @@ extern char trampoline[]; // trampoline.S
 // memory model when using p->parent.
 // must be acquired before any p->lock.
 struct spinlock wait_lock;
+
 
 // Allocate a page for each process's kernel stack.
 // Map it high in memory, followed by an invalid
@@ -56,6 +59,8 @@ procinit(void)
       p->state = UNUSED;
       p->kstack = KSTACK((int) (p - proc));
   }
+  // taks 4:
+  petersonlock_init(); 
 }
 
 // Must be called with interrupts disabled,
