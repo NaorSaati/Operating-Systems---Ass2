@@ -1,3 +1,5 @@
+typedef unsigned int uint;
+
 struct stat;
 
 // system calls
@@ -28,6 +30,7 @@ int peterson_acquire(int lock_id, int role);
 int peterson_release(int lock_id, int role);
 int peterson_destroy(int lock_id);
 
+
 // ulib.c
 int stat(const char*, struct stat*);
 char* strcpy(char*, const char*);
@@ -44,3 +47,7 @@ void free(void*);
 int atoi(const char*);
 int memcmp(const void *, const void *, uint);
 void *memcpy(void *, const void *, uint);
+// task 2
+int tournament_create(int);
+int tournament_acquire(void);
+int tournament_release(void);

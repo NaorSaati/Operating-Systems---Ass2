@@ -59,7 +59,6 @@ petersonlock_release(int lock_id, int role) {
 
     __sync_synchronize();
     lock->flag[role] = 0;
-    __sync_lock_release(&lock->flag[role]);
     __sync_synchronize();
 
     return 0;
