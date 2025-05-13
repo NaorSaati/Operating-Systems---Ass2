@@ -10,13 +10,13 @@ static int num_levels = 0;      // Number of levels in the tournament tree
 static int *lock_ids = 0;       // Array of Peterson lock IDs
 
 int tournament_create(int processes) {
-    // Check if the number of processes is valid (power of 2 up to 16)
+    // Check if the number of processes is valid
     if (processes <= 0 || processes > 16 || (processes & (processes - 1)) != 0) {
-        return -1;  // Not a power of 2 or out of range
+        return -1; 
     }
 
     num_processes = processes;
-    lock_ids = malloc(sizeof(int) * (num_processes - 1));
+    lock_ids = malloc(sizeof(int) * (num_processes - 1)); // N-1 lockers fo binary tree
     if (!lock_ids) {
         return -1;  // Memory allocation failed
     }
@@ -41,20 +41,20 @@ int tournament_create(int processes) {
         num_levels++;
     }
 
-    for (int i = 1; i < processes; i++) {
+    for (int i = 1; i < processes; i++) { // Creating processes with fork()
         int pid = fork();
         if (pid < 0) {
             printf("fork failed!\n");
             return -1;
         }
-        if (pid == 0) {
+        if (pid == 0) { // Each fork() creates another process with a different ID (in the loop)
             proc_id = i;
             return proc_id;
         }
     }
-
     return proc_id;
 }
+
 
 int tournament_acquire(void) {
     if (num_processes == 0 || num_levels == 0 || lock_ids == 0) {
@@ -87,6 +87,7 @@ int tournament_acquire(void) {
 
     return 0;
 }
+
 
 int tournament_release(void) {
     int node = proc_id, role;
